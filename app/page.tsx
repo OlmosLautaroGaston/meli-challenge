@@ -1,7 +1,19 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 
-export default function Home() {
+const getData = async () => {
+  const response = await fetch(
+    "https://api.mercadolibre.com/sites/MLA/search?q=:query"
+  );
+  if (!response.ok) {
+    throw new Error("failed to fetch API data");
+  }
+  console.log(response);
+
+  return response.json();
+};
+export default async function Home() {
+  const apiData = await getData();
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -28,16 +40,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <div className={styles.center}>{JSON.stringify(apiData)}</div>
 
       <div className={styles.grid}>
         <a
